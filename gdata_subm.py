@@ -7,12 +7,16 @@ import json
 import logging
 import time
 from socket import gethostname
-from typing import List
+from typing import List, Optional, Dict, Any
 from urllib.request import (
     HTTPBasicAuthHandler,
     build_opener,
     HTTPPasswordMgrWithDefaultRealm,
 )
+
+
+class DataError(Exception):
+    pass
 
 
 class Gdata:
@@ -28,15 +32,15 @@ class Gdata:
 
     def __init__(
             self,
-            plugin: str,
-            dstypes: List[str],
-            values: List[float],
-            host: str=None,
-            plugin_instance: str='',
-            dtype: str=None,
-            dtype_instance: str='',
-            dsnames: List[str]=None,
-            interval: float=10.0) -> None:
+            plugin: str,  # The name of your thing
+            dstypes: List[str],  # The list of types: gauge, derive, counter
+            values: List[float], # The corresponding list of values
+            host: Optional[str]=None,
+            plugin_instance: Optional[str]='',
+            dtype: Optional[str]=None,
+            dtype_instance: Optional[str]='',
+            dsnames: Optional[List[str]]=None,
+            interval: Optional[float]=10.0) -> None:
         self.plugin = plugin
         self.dstypes = dstypes
         self.values = values
@@ -46,8 +50,9 @@ class Gdata:
         self.dsnames = dsnames
         self.interval = interval
         self.host = host if host else self._get_hostname()
+        self._validate_data()
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
         ret = {
             'values': self.values,
             'dstypes': self.dstypes,
@@ -63,12 +68,25 @@ class Gdata:
 
         return ret
 
-    def _get_hostname(self):
+    def _get_hostname(self) -> str:
         name = gethostname()
         if '.' in name:
             name = name.split('.')[0]
 
         return name
+
+    def _validate_data(self):
+        if len(self.dstypes) != len(self.values):
+            raise DataError(
+                'You must have the same number of dstypes as values')
+
+        if self.dsnames and len(self.dsnames) != len(self.dstypes):
+            raise DataError(
+                'You must have the same number of dstypes as dsnames')
+
+        if self.interval < 0:
+            raise DataError(
+                'Invalid interval {}, must be > 0'.format(self.interval))
 
 
 class GdataSubmit:
