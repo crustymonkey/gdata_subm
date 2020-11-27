@@ -43,7 +43,7 @@ class Gdata:
             interval: Optional[float]=10.0) -> None:
         self.plugin = plugin
         self.dstypes = dstypes
-        self.values = values
+        self.values = [float(v) for v in values]
         self.plugin_instance = plugin_instance
         self.dtype = dtype
         self.dtype_instance = dtype_instance
