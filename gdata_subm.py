@@ -48,7 +48,7 @@ class Gdata:
         self.dtype = dtype
         self.dtype_instance = dtype_instance
         self.dsnames = dsnames
-        self.interval = interval
+        self.interval = float(interval)
         self.host = host if host else self._get_hostname()
         self._validate_data()
 
