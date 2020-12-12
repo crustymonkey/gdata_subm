@@ -39,7 +39,7 @@ class Gdata:
             plugin_instance: Optional[str]='',
             dtype: Optional[str]=None,
             dtype_instance: Optional[str]='',
-            dsnames: Optional[List[str]]=None,
+            dsnames: Optional[List[str]]=None,  # The list of names for values
             interval: Optional[float]=10.0) -> None:
         self.plugin = plugin
         self.dstypes = dstypes
@@ -75,7 +75,7 @@ class Gdata:
 
         return name
 
-    def _validate_data(self):
+    def _validate_data(self) -> None:
         if len(self.dstypes) != len(self.values):
             raise DataError(
                 'You must have the same number of dstypes as values')
@@ -97,6 +97,10 @@ class GdataSubmit:
         self.url = url
 
     def send_data(self, data: List[Gdata]) -> bool:
+        if isinstance(data, Gdata):
+            # Turn this into a list
+            data = [data]
+
         ret = True
         handler = self._get_auth_handler()
         opener = build_opener(self._get_auth_handler())

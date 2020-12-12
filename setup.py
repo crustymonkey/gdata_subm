@@ -5,7 +5,7 @@ from distutils.core import setup
 setup(
     name='gdata_subm',
     description='The submission library for gdata2pg',
-    version='0.1.3',
+    version='0.1.4',
     author='Jay Deiman',
     author_email='admin@splitstreams.com',
     url='https://stuffivelearned.org',
