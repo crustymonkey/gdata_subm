@@ -4,7 +4,10 @@ from distutils.core import setup
 
 setup(
     name='gdata_subm',
-    description='The submission library for gdata2pg',
+    description=(
+        'The submission library for sending data in the same format '
+        'as collectd'
+    ),
     version='0.1.4',
     author='Jay Deiman',
     author_email='admin@splitstreams.com',
