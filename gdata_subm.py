@@ -101,6 +101,18 @@ class GdataSubmit:
             # Turn this into a list
             data = [data]
 
+        # Strip out anything that is None in the list
+        none_count = 0
+        for item in data:
+            if item is None:
+                none_count += 1
+        for _ in range(none_count):
+            data.remove(None)
+
+        if not data:
+            # If there was no actual data, simply return
+            return True
+
         ret = True
         handler = self._get_auth_handler()
         opener = build_opener(self._get_auth_handler())

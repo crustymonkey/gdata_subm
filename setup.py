@@ -8,7 +8,7 @@ setup(
         'The submission library for sending data in the same format '
         'as collectd'
     ),
-    version='0.1.4',
+    version='0.1.5',
     author='Jay Deiman',
     author_email='admin@splitstreams.com',
     url='https://stuffivelearned.org',
